@@ -91,6 +91,8 @@
       thisProduct.formInputs = thisProduct.element.querySelectorAll(select.all.formInputs);
       thisProduct.cartButton = thisProduct.element.querySelector(select.menuProduct.cartButton);
       thisProduct.priceElem = thisProduct.element.querySelector(select.menuProduct.priceElem);
+      thisProduct.amountWidget = thisProduct.element.querySelector(select.menuProduct.amountWidget);
+      thisProduct.imageWrapper = thisProduct.element.querySelector(select.menuProduct.imageWrapper);
     }
     /* adding accordion */
     initAccordion() {
@@ -149,11 +151,11 @@
           powyższa linijka zapisze cały obiekt */
         for(let optionId in param.options) {
           const option =param.options[optionId];
+          const optionIf = formData[paramId] && formData[paramId].includes(optionId);
 
           // check if there is param with a name of paramId in formData and if it includes optionId
-          if(formData[paramId] && formData[paramId].includes(optionId)) {
-            // check if the option is not default 
-            // option is not default, increase price
+          if(optionIf) {
+
             if(option.default !==  true) {
               price += option.price;
             } 
@@ -162,8 +164,18 @@
               price -= option.price;
             }
           }
+          const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
+          if(optionImage){
+            if(optionIf) {
+              optionImage.classList.add(classNames.menuProduct.imageVisible);
+            }
+            else {
+              optionImage.classList.remove(classNames.menuProduct.imageVisible);
+            }
+          }
         }
       }
+
       thisProduct.priceElem.innerHTML = price;
     }
   }
