@@ -43,7 +43,7 @@
   const settings = {
     amountWidget: {
       defaultValue: 1,
-      defaultMin: 1,
+      defaultMin: 0,
       defaultMax: 9,
     },
   };
@@ -139,7 +139,7 @@
     }
     initAmountWidget(){
       const thisProduct = this;
-      thisProduct.amountWidget = new amountWidget(thisProduct.amountWidgetElem);
+      thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
     }
     processOrder() {
       const thisProduct = this;
@@ -184,7 +184,7 @@
     }
   }
 
-  class amountWidget {
+  class AmountWidget {
     constructor(element) {
       const thisWidget = this;
       thisWidget.getElements(element);
@@ -217,10 +217,7 @@
         }
       }
 
-      //wartość minimalna: settings.amountWidget.defaultMin
-      //wartość maksymalna: settings.amountWidget.defaultMax
 
-      thisWidget.value = newValue;
       thisWidget.input.value = thisWidget.value;
     }
     initActions(){
@@ -231,11 +228,11 @@
       });
       thisWidget.linkDecrease.addEventListener('click', function(event) {
         event.preventDefault;
-        thisWidget.setValue(--thisWidget.value);
+        thisWidget.setValue(thisWidget.value -1);
       }); 
       thisWidget.linkIncrease.addEventListener('click', function(event) {
         event.preventDefault;
-        thisWidget.setValue(++thisWidget.value);
+        thisWidget.setValue(thisWidget.value +1);
       });
 
       
