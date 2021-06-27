@@ -155,22 +155,20 @@
           powyższa linijka zapisze cały obiekt */
         for(let optionId in param.options) {
           const option =param.options[optionId];
-          const optionIf = formData[paramId] && formData[paramId].includes(optionId);
+          const isOptionSelected = formData[paramId] && formData[paramId].includes(optionId);
 
           // check if there is param with a name of paramId in formData and if it includes optionId
-          if(optionIf) {
+          if(isOptionSelected) {
 
             if(option.default !==  true) {
               price += option.price;
-            } 
-          } else {
-            if(option.default == true) {
+            } else if (option.default == true) {
               price -= option.price;
             }
           }
           const optionImage = thisProduct.imageWrapper.querySelector('.' + paramId + '-' + optionId);
           if(optionImage){
-            if(optionIf) {
+            if(isOptionSelected) {
               optionImage.classList.add(classNames.menuProduct.imageVisible);
             }
             else {
