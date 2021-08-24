@@ -23,7 +23,7 @@ const app = {
     for (let link of thisApp.navLinks) {
       link.addEventListener('click', function (event) {
         const clickedElement = this;
-        event.preventDefault;
+        event.preventDefault();
 
         //get page id from href attribute
         const id = clickedElement.getAttribute('href').replace('#', '');
@@ -35,7 +35,7 @@ const app = {
         window.location.hash = '#/' + id; // replace '#' with '#/'
       });
     }
-  },
+  },  
 
   activatePage: function (pageId) {
     const thisApp = this;
