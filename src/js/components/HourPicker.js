@@ -21,9 +21,9 @@ class HourPicker extends BaseWidget {
   initPlugin() {
     const thisWidget = this;
     // eslint-disable-next-line no-undef
+    /* global rangeSlider */
     rangeSlider.create(thisWidget.dom.input);
     //method creates a new object, using an existing object as the prototype of the newly created object.
-    console.log('rangeSlider', rangeSlider);
     thisWidget.dom.input.addEventListener('input', function () {
       thisWidget.value = thisWidget.dom.input.value;
     });
