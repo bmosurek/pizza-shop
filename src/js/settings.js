@@ -45,6 +45,7 @@ export const select = {
     tables: '.floor-plan .table',
     floorPlan: '.floor-plan',
     selected: '.selected',
+    form: '.booking-form',
   },
   nav: {
     links: '.main-nav a',
