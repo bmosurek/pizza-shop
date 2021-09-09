@@ -11,7 +11,7 @@ class Booking {
     thisBooking.render(element);
     thisBooking.initWidgets();
     thisBooking.getData();
-    thisBooking.selectTable();
+    thisBooking.initSelection();
   }
   getData() {
     const thisBooking = this;
@@ -151,6 +151,14 @@ class Booking {
         table.classList.remove(classNames.booking.tableBooked);
       }
     }
+    if (
+      thisBooking.selectedDate !== thisBooking.date ||
+      thisBooking.selectedHour !== thisBooking.hour
+    ) {
+      thisBooking.removeSelection();
+    }
+    thisBooking.selectedDate = thisBooking.date;
+    thisBooking.selectedHour = thisBooking.hour;
   }
 
   render(element) {
@@ -208,46 +216,49 @@ class Booking {
       thisBooking.sendBooking();
     });
   }
-  //function selectTable does not refresh with date/time change!
-  selectTable() {
+  initSelection() {
     const thisBooking = this;
 
     for (let table of thisBooking.dom.tables) {
       table.addEventListener('click', function (event) {
         event.preventDefault();
-        const tableId = table.getAttribute('data-table');
-        // check if a table is booked
+        const tableId = table.getAttribute(settings.booking.tableIdAttribute);
         if (table.classList.contains('booked')) {
           alert('Please change date, hour or choose different table');
-          //table is not booked, check if selected
         } else {
           const selectedTable = thisBooking.dom.wrapper.querySelector(
             select.booking.selected
           );
-          //if selectedTable is not 'undefined', get its id
           if (selectedTable !== null) {
             thisBooking.selectedTableId = selectedTable.getAttribute(
               settings.booking.tableIdAttribute
             );
-            //if selectedTableId ==! tableId
             if (thisBooking.selectedTableId !== tableId) {
-              //remove selection from previous table
               thisBooking.removeSelection();
-              // add new selection: class and thisBooking object
-              thisBooking.selectedTable = table;
-              table.classList.add(classNames.booking.tableSelected);
+              thisBooking.selectTable(table);
             } else {
               thisBooking.removeSelection();
             }
-
-            // remove selection form the same table as previously clicked
           } else {
-            table.classList.add(classNames.booking.tableSelected);
+            thisBooking.selectTable(table);
           }
         }
       });
     }
   }
+
+  selectTable(table) {
+    const thisBooking = this;
+    const tableId = table.getAttribute(settings.booking.tableIdAttribute);
+    table.classList.add(classNames.booking.tableSelected);
+
+    thisBooking.selectedTable = {
+      tableId,
+      hour: thisBooking.hour,
+      date: thisBooking.date,
+    };
+  }
+
   removeSelection() {
     const thisBooking = this;
     const selectedTables = thisBooking.dom.wrapper.querySelectorAll(
@@ -265,7 +276,7 @@ class Booking {
     const payload = {
       date: thisBooking.datePicker.value,
       hour: thisBooking.hourPicker.value,
-      table: thisBooking.selectedTable,
+      table: thisBooking.selectedTableId,
       duration: parseInt(thisBooking.hoursAmount.value),
       ppl: parseInt(thisBooking.peopleAmount.value),
       starters: [],
