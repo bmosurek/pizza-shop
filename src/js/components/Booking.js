@@ -157,8 +157,6 @@ class Booking {
     ) {
       thisBooking.removeSelection();
     }
-    thisBooking.selectedDate = thisBooking.date;
-    thisBooking.selectedHour = thisBooking.hour;
   }
 
   render(element) {
@@ -222,6 +220,8 @@ class Booking {
     for (let table of thisBooking.dom.tables) {
       table.addEventListener('click', function (event) {
         event.preventDefault();
+        thisBooking.selectedHour = thisBooking.hour;
+        thisBooking.selectedDate = thisBooking.date;
         const tableId = table.getAttribute(settings.booking.tableIdAttribute);
         if (table.classList.contains('booked')) {
           alert('Please change date, hour or choose different table');
@@ -254,8 +254,8 @@ class Booking {
 
     thisBooking.selectedTable = {
       tableId,
-      hour: thisBooking.hour,
-      date: thisBooking.date,
+      hour: thisBooking.selectedHour,
+      date: thisBooking.selectedDate,
     };
   }
 
@@ -276,19 +276,19 @@ class Booking {
     const payload = {
       date: thisBooking.datePicker.value,
       hour: thisBooking.hourPicker.value,
-      table: thisBooking.selectedTableId,
+      table: thisBooking.selectedTable.tableId,
       duration: parseInt(thisBooking.hoursAmount.value),
       ppl: parseInt(thisBooking.peopleAmount.value),
       starters: [],
-      phone: thisBooking.dom.phone,
-      address: thisBooking.dom.address,
+      phone: thisBooking.dom.phone.value,
+      address: thisBooking.dom.address.value,
     };
+
     for (let starter of thisBooking.dom.starters) {
       if (starter.checked == true) {
         payload.starters.push(starter.value);
       }
     }
-
     const options = {
       method: 'POST',
       headers: {
@@ -303,6 +303,7 @@ class Booking {
       })
       .then(function (parsedResponse) {
         console.log('parsedResponse', parsedResponse);
+        console.log('thisBooking.booked', thisBooking.booked);
       });
   }
 }

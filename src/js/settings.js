@@ -46,6 +46,7 @@ export const select = {
     floorPlan: '.floor-plan',
     selected: '.selected',
     form: '.booking-form',
+    starters: '[name="starter"]',
   },
   nav: {
     links: '.main-nav a',
